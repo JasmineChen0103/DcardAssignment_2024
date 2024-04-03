@@ -1,3 +1,5 @@
+//Navbar.js
+
 import React from 'react';
 import GitHubLogo from '../assets/github-logo.png';
 import './Navbar.css';
