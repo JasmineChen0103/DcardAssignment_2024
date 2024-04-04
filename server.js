@@ -25,37 +25,48 @@ app.use(bodyParser.json());
 
 // Route to handle GitHub OAuth callback
 app.get('/getAccessToken', async function (req, res) {
-
     console.log(req.query.code);
 
-    const params = "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&code=" + req.query.code;
+    const params = `?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&code=${req.query.code}`;
 
-    await fetch('https://github.com/login/oauth/access_token' + params, {
-        method: "POST",
-        headers: {
-            "Accept": 'application/json'
-        }
-    }).then((response) => {
-        return response.json();
-    }).then((data) => {
+    try {
+        const response = await fetch(`https://github.com/login/oauth/access_token${params}`, {
+            method: "POST",
+            headers: {
+                "Accept": 'application/json'
+            }
+        });
+
+        const data = await response.json();
         console.log(data);
+
+        // Send the access token back to the client
         res.json(data);
-    });
+    } catch (error) {
+        console.error('Error fetching access token:', error);
+        res.status(500).json({ error: 'Failed to fetch access token' });
+    }
 });
 
+// Route to get user data from GitHub
 app.get('/getUserData', async function (req, res) {
-    req.get("Authorization");
-    await fetch("https://api.github.com/user", {
-        method: "GET",
-        headers: {
-            "Authorization": req.get("Authorization")
-        }
-    }).then((response) => {
-        return response.json();
-    }).then((data) => {
-        console.log(data);
-        res.json(data);
-    });
+    const accessToken = req.get("Authorization");
+
+    try {
+        const response = await fetch(`${GITHUB_API_URL}/user`, {
+            method: "GET",
+            headers: {
+                "Authorization": accessToken
+            }
+        });
+
+        const userData = await response.json();
+        console.log(userData);
+        res.json(userData);
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        res.status(500).json({ error: 'Failed to fetch user data' });
+    }
 })
 
 // Start the server
