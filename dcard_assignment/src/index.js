@@ -6,9 +6,10 @@ import ReactDOM from 'react-dom/client'; // 导入 ReactDOM 库，用于将 Reac
 
 const root = document.getElementById('root'); // 获取 HTML 页面中的根 DOM 元素
 const rootElement = (
-    <React.StrictMode> {/* 使用 React.StrictMode 组件包裹 App 组件，启用严格模式 */}
-        <App /> {/* 渲染 App 组件 */}
-    </React.StrictMode>
+    // <React.StrictMode> {/* 使用 React.StrictMode 组件包裹 App 组件，启用严格模式 */}
+    //     <App /> {/* 渲染 App 组件 */}
+    // </React.StrictMode>
+    <App />
 );
 
 const rootInstance = ReactDOM.createRoot(root); // 创建根 fiber

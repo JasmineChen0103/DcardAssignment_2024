@@ -1,19 +1,24 @@
 // PostList.js
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { parse } from 'marked';
 import { useNavigate } from 'react-router-dom';
+import './PostList.css';
+import Modal from 'react-modal';
+import NewPost from './NewPost';
 
-const PostList = () => {
+const PostList = ({ userType }) => {
     const [issues, setIssues] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchIssues = async () => {
             try {
-                const accessToken = "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";
+                const accessToken = "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";
 
                 // Step 1: 获取特定用户的所有存储库列表
                 const repoResponse = await axios.get(`https://api.github.com/users/DannierForDcard/repos`, {
@@ -26,6 +31,7 @@ const PostList = () => {
 
                 // Step 2: 遍历存储库列表，获取每个存储库的 issue 数据
                 const issuePromises = repos.map(async repo => {
+                    console.log(`Fetching issues for repository: ${repo} - Page: ${page}`);
                     const response = await axios.get(`https://api.github.com/repos/${repo}/issues?per_page=10&page=${page}`, {
                         headers: {
                             Authorization: `token ${accessToken}`
@@ -53,6 +59,7 @@ const PostList = () => {
             }
         };
 
+
         fetchIssues();
     }, [page]);
 
@@ -68,49 +75,50 @@ const PostList = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // 定义点击事件处理函数
+    // 點各個issue
     const handleIssueClick = (issue) => {
+        console.log(issue);
         navigate(`/post/${issue.id}`, { state: { issue } });
+    };
+
+    // 開啟 Modal 函數
+    const openModal = () => {
+        setModalIsOpen(true);
+    };
+
+    // 關閉 Modal 函數
+    const closeModal = () => {
+        setModalIsOpen(false);
     };
 
     return (
         <>
             <h1>GitHub Issues</h1>
+            {userType === 1 && (
+                <button className="new-post-button" onClick={openModal}>New Post</button>
+            )}
+            {/* Modal 開始 */}
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="New Post Modal"
+            >
+                <NewPost closeModal={closeModal} />
+            </Modal>
+            {/* Modal 結束 */}
             {loading ? (
                 <p>Loading...</p>
             ) : (
                 <div>
                     {issues.map((issue, index) => (
-                        <div
+                        <div className='issue_container'
                             key={index}
                             onClick={() => handleIssueClick(issue)}
-                            style={{
-                                borderRadius: '8px',
-                                border: '1px solid #ccc',
-                                padding: '10px',
-                                marginBottom: '10px',
-                                cursor: 'pointer'
-                            }}
                         >
-                            <div
-                                style={{
-                                    height: '25px',
-                                    overflow: 'hidden',
-                                    backgroundColor: '#f2f2f2',
-                                    borderRadius: '8px 8px 0 0',
-                                    padding: '10px'
-                                }}
-                            >
+                            <div className='issue_title'>
                                 <strong>{issue.title}</strong>
                             </div>
-                            <div
-                                style={{
-                                    height: '200px',
-                                    overflowY: 'auto',
-                                    borderRadius: '0 0 8px 8px',
-                                    padding: '10px'
-                                }}
-                            >
+                            <div className='issue_body'>
                                 <div dangerouslySetInnerHTML={{ __html: issue.body_html }} />
                             </div>
                         </div>
@@ -122,7 +130,3 @@ const PostList = () => {
 };
 
 export default PostList;
-
-
-
-

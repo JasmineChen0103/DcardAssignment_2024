@@ -1,0 +1,42 @@
+.new-post-button {
+    color: aliceblue;
+    padding: 10px 20px;
+    /* 设置按钮内边距 */
+    font-size: 20px;
+    /* 设置字体大小 */
+    background-color: #006AA6;
+    /* 设置背景颜色 */
+    border: none;
+    /* 移除边框 */
+    border-radius: 5px;
+    /* 设置圆角 */
+    margin-bottom: 20px;
+    /* 设置距离下面的 issue 的距离 */
+    cursor: pointer;
+    /* 设置光标为指针 */
+}
+
+.issue_body {
+    height: 200px;
+    overflow-y: auto;
+    border-radius: 0 0 8px 8px;
+    padding: 10px;
+}
+
+.issue_title {
+    height: 25px;
+    overflow: hidden;
+    background-color: #f2f2f2;
+    border-radius: 8px 8px 0 0;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.issue_container {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
