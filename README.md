@@ -1,8 +1,8 @@
 # 專案概述
 
 這個專案是為了申請 Dcard 2024 前端實習生職位而寫的範例作業。以下是作業要求
-
-[link_to_pdf)](https://drive.google.com/file/d/1TYiTdtrtISkT25AULbycKipaX8yveBmN/view?usp=sharing)
+；
+[2024 Frontend Intern Homework](https://drive.google.com/file/d/1TYiTdtrtISkT25AULbycKipaX8yveBmN/view?usp=sharing)
 
 # 如何啟動專案
 
@@ -34,7 +34,24 @@
 
 # 作業架構設計
 
+在這個專案中，構建了一個 React 應用程式，該應用程式具有以下結構：
 
+- `assets` 資料夾：包含了圖片檔案 `github-logo.png`。
+- `components` 資料夾：包含了一系列 CSS 樣式文件以及用於不同功能模塊的 React 組件。
+  - `EditPost.css`
+  - `NewPost.css`
+  - `Post.css`
+  - `PostList.css`
+  - `Navbar.css`
+- `pages` 資料夾：包含了應用程式的主要頁面，每個頁面對應於應用程式的不同功能。
+  - `PostList.js`
+  - `Post.js`
+  - `NewPost.js`
+  - `EditPost.js`
+- `App.js`：React 應用程式的主要入口點，定義了應用程式的整體結構和路由設置。
+- `index.js`：React 應用程式的渲染入口點。
+
+此外，還包含了一個 `server.js` 文件，用於設置後端服務。這個後端服務提供了與 GitHub API 的交互功能，用於處理 OAuth 認證、獲取用戶數據以及創建和更新 GitHub Issue。
 
 # 在本地端操作作業的螢幕錄影
 
