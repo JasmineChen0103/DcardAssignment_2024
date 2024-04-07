@@ -19,27 +19,27 @@ const App = () => {
 
     useEffect(() => {
 
-        const queryString = window.location.search; // 获取 URL 中的查询字符串
-        const urlParams = new URLSearchParams(queryString); // 使用 URLSearchParams 构造函数解析查询字符串
-        const codeParam = urlParams.get("code"); // 获取查询字符串中的 code 参数
-        console.log(codeParam); // 在控制台输出 code 参数的值
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const codeParam = urlParams.get("code");
+        console.log(codeParam);
 
-        if (codeParam && (localStorage.getItem("accessToken") === null)) { // 如果存在 code 参数且尚未存储访问令牌
+        if (codeParam && (localStorage.getItem("accessToken") === null)) {
             async function getAccessToken() {
-                await fetch("http://localhost:4000/getAccessToken?code=" + codeParam, { // 发送 GET 请求获取访问令牌
+                await fetch("http://localhost:4000/getAccessToken?code=" + codeParam, {
                     method: "GET"
                 }).then((response) => {
-                    return response.json(); // 解析响应数据为 JSON 格式
+                    return response.json();
                 }).then((data) => {
-                    console.log(data); // 在控制台输出获取到的访问令牌数据
-                    if (data.access_token) { // 如果成功获取到访问令牌
-                        localStorage.setItem("accessToken", data.access_token); // 将访问令牌存储到本地存储中
-                        setRerender(!rerender); // 触发重新渲染组件
+                    console.log(data);
+                    if (data.access_token) {
+                        localStorage.setItem("accessToken", data.access_token);
+                        setRerender(!rerender);
                         getUserData();
                     }
                 })
             }
-            getAccessToken(); // 调用函数获取访问令牌
+            getAccessToken();
         }
 
     }, []);
@@ -67,8 +67,8 @@ const App = () => {
 
     useEffect(() => {
 
-        console.log("User Type:", userType); // 在這裡 log 出 userType 的值
-        localStorage.setItem("userType", userType); // 将 userType 存储到本地存储中
+        console.log("User Type:", userType);
+        localStorage.setItem("userType", userType);
 
     }, [userType]);
 
@@ -82,7 +82,7 @@ const App = () => {
     }
 
     return (
-        <Router> {/* 使用 BrowserRouter 组件作为路由的根组件 */}
+        <Router>
             <div>
                 <nav className="navbar">
                     <div className="navbar-left">
@@ -106,8 +106,8 @@ const App = () => {
                     </div>
                 </nav>
 
-                <Routes> {/* 使用 Routes 组件包裹路由配置 */}
-                    <Route path="/" element={<PostList userType={userType} />} /> {/* 当访问根路径时，渲染 Home 组件 */}
+                <Routes>
+                    <Route path="/" element={<PostList userType={userType} />} />
                     <Route path="/new-post" element={<NewPost />} />
                     <Route path="/post/:id" element={<Post userType={userType} />} />
 
@@ -117,7 +117,7 @@ const App = () => {
     );
 };
 
-export default App; // 导出 App 组件
+export default App;
 
 
 

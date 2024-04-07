@@ -2,7 +2,6 @@
 
 .form-group {
     margin-bottom: 10px;
-    /* 可以根据需要调整垂直间距 */
 }
 
 .repo-label {
@@ -18,27 +17,18 @@
 .center {
     display: grid;
     place-items: center;
-    /* 在网格容器中水平和垂直居中 */
     height: 50vh;
-    /* 设置高度为视口的高度，使其占据整个屏幕 */
     margin-top: 10px;
 }
 
 .submit_button {
     color: white;
     padding: 5px 10px;
-    /* 设置按钮内边距 */
     font-size: 15px;
-    /* 设置字体大小 */
     background-color: #BEBEBE;
-    /* 设置背景颜色 */
     border: none;
-    /* 移除边框 */
     border-radius: 5px;
-    /* 设置圆角 */
     margin-bottom: 20px;
-    /* 设置距离下面的 issue 的距离 */
     cursor: pointer;
-    /* 设置光标为指针 */
     margin-right: 5px;
 }

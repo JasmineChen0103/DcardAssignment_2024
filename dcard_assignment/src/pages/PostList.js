@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { parse } from 'marked';
 import { useNavigate } from 'react-router-dom';
-import './PostList.css';
+import '../components/PostList.css';
 import Modal from 'react-modal';
 import NewPost from './NewPost';
 
@@ -13,14 +13,20 @@ const PostList = ({ userType }) => {
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [globalIssueNumber, setGlobalIssueNumber] = useState(0);
     const navigate = useNavigate();
+    const [loadIssueNum, setLoadIssueNum] = useState(10);
+    const [GlobalIssueNum, setGlobalIssueNum] = useState(0);
+
+
+
 
     useEffect(() => {
-        const fetchIssues = async () => {
+        const fetchAllIssues = async () => {
             try {
-                const accessToken = "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";
+                const accessToken = "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";
 
-                // Step 1: 获取特定用户的所有存储库列表
+                // 取所有repository
                 const repoResponse = await axios.get(`https://api.github.com/users/DannierForDcard/repos`, {
                     headers: {
                         Authorization: `token ${accessToken}`
@@ -29,44 +35,58 @@ const PostList = ({ userType }) => {
 
                 const repos = repoResponse.data.map(repo => repo.full_name);
 
-                // Step 2: 遍历存储库列表，获取每个存储库的 issue 数据
+                // 抓每個repository的所有issue
                 const issuePromises = repos.map(async repo => {
-                    console.log(`Fetching issues for repository: ${repo} - Page: ${page}`);
-                    const response = await axios.get(`https://api.github.com/repos/${repo}/issues?per_page=10&page=${page}`, {
+                    const response = await axios.get(`https://api.github.com/repos/${repo}/issues`, {
                         headers: {
                             Authorization: `token ${accessToken}`
+                        },
+                        params: {
+                            per_page: 100  // 每個repository issue的上限
                         }
                     });
                     return response.data;
                 });
 
-                // Step 3: 将每个存储库的 issue 数据合并到一个数组中
+                // 將每個repository的issue合併到一個數組
                 const issueData = await Promise.all(issuePromises);
                 const mergedIssues = issueData.flat();
 
-                // 将 Markdown 内容转换为 HTML
-                mergedIssues.forEach(issue => {
+                // 給所有issue全局編號
+                const numberedIssues = mergedIssues.map((issue, index) => ({
+                    ...issue,
+                    globalNumber: globalIssueNumber + index + 1
+                }));
+
+                // markdown轉html
+                numberedIssues.forEach(issue => {
                     if (issue.body) {
                         issue.body_html = parse(issue.body);
                     }
                 });
 
-                // Step 4: 更新状态以渲染页面
-                setIssues(prevIssues => [...prevIssues, ...mergedIssues]);
+                // 更新狀態
+                setIssues(prevIssues => [...prevIssues, ...numberedIssues]);
                 setLoading(false);
+
+                setGlobalIssueNum(mergedIssues.length);
+
+                //console.log("Last Global Issue Number:", mergedIssues.length);
+
             } catch (error) {
                 console.error('Error fetching issues:', error);
             }
         };
 
-
-        fetchIssues();
+        fetchAllIssues();
     }, [page]);
 
+    // 控制滾輪
     const handleScroll = () => {
         const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight;
         if (bottom) {
-            setPage(prevPage => prevPage + 1);
+            setLoadIssueNum(prevNum => prevNum + 10);
+            console.log("loadNum: ", loadIssueNum);
         }
     };
 
@@ -75,21 +95,34 @@ const PostList = ({ userType }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // 點各個issue
+    // 點各個issue進入文章頁
     const handleIssueClick = (issue) => {
-        console.log(issue);
         navigate(`/post/${issue.id}`, { state: { issue } });
     };
 
-    // 開啟 Modal 函數
+    // 開啟 Modal
     const openModal = () => {
         setModalIsOpen(true);
     };
 
-    // 關閉 Modal 函數
+    // 關閉 Modal
     const closeModal = () => {
         setModalIsOpen(false);
     };
+
+    // 把issue body的markdown語法拿掉
+    const removeMarkdownSyntax = (markdownString) => {
+
+        let withoutHeaders = markdownString.replace(/^#+\s*(.*)$/gm, '$1');
+        withoutHeaders = withoutHeaders.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1');
+        withoutHeaders = withoutHeaders.replace(/\[(.*?)\]\(.*?\)/g, '$1');
+        withoutHeaders = withoutHeaders.replace(/`(.*?)`/g, '$1')
+        withoutHeaders = withoutHeaders.replace(/!\[.*?\]\(.*?\)/g, '');
+
+        return withoutHeaders;
+    };
+
+
 
     return (
         <>
@@ -97,7 +130,7 @@ const PostList = ({ userType }) => {
             {userType === 1 && (
                 <button className="new-post-button" onClick={openModal}>New Post</button>
             )}
-            {/* Modal 開始 */}
+            {/* 新增模式 */}
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
@@ -105,21 +138,19 @@ const PostList = ({ userType }) => {
             >
                 <NewPost closeModal={closeModal} />
             </Modal>
-            {/* Modal 結束 */}
+
             {loading ? (
                 <p>Loading...</p>
             ) : (
                 <div>
-                    {issues.map((issue, index) => (
-                        <div className='issue_container'
-                            key={index}
-                            onClick={() => handleIssueClick(issue)}
-                        >
+                    {/* 10個10個顯示 */}
+                    {issues.slice(0, loadIssueNum).map((issue, index) => (
+                        <div className='issue_container' key={index} onClick={() => handleIssueClick(issue)}>
                             <div className='issue_title'>
-                                <strong>{issue.title}</strong>
+                                <strong>{issue.globalNumber + ". " + issue.title}</strong>
                             </div>
                             <div className='issue_body'>
-                                <div dangerouslySetInnerHTML={{ __html: issue.body_html }} />
+                                <div>{removeMarkdownSyntax(issue.body)}</div>
                             </div>
                         </div>
                     ))}

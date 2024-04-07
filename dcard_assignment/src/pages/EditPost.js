@@ -2,18 +2,20 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import './EditPost.css';
+import '../components/EditPost.css';
+import { useNavigate } from 'react-router-dom';
 
 const EditPost = ({ post, closeModal }) => {
     const [title, setTitle] = useState(post.title);
     const [body, setBody] = useState(post.body);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const accessToken = "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";
+            const accessToken = "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";
 
-            // 发送 PATCH 请求以更新 issue
+            // PATCH請求更新issue
             await axios.patch(post.url, {
                 title,
                 body
@@ -24,7 +26,8 @@ const EditPost = ({ post, closeModal }) => {
             });
             console.log('Updated issue:', { title, body });
 
-            closeModal(); // 关闭编辑模态框
+            closeModal();
+            navigate('/');
 
         } catch (error) {
             console.error('Error updating post:', error);

@@ -1,38 +1,26 @@
+/* Post.css */
+
 .edit_button {
     color: white;
     padding: 5px 10px;
-    /* 设置按钮内边距 */
     font-size: 15px;
-    /* 设置字体大小 */
     background-color: #BEBEBE;
-    /* 设置背景颜色 */
     border: none;
-    /* 移除边框 */
     border-radius: 5px;
-    /* 设置圆角 */
     margin-bottom: 20px;
-    /* 设置距离下面的 issue 的距离 */
     cursor: pointer;
-    /* 设置光标为指针 */
     margin-right: 5px;
 }
 
 .delete_button {
     color: white;
     padding: 5px 10px;
-    /* 设置按钮内边距 */
     font-size: 15px;
-    /* 设置字体大小 */
     background-color: #FF6A6A;
-    /* 设置背景颜色 */
     border: none;
-    /* 移除边框 */
     border-radius: 5px;
-    /* 设置圆角 */
     margin-bottom: 20px;
-    /* 设置距离下面的 issue 的距离 */
     cursor: pointer;
-    /* 设置光标为指针 */
 }
 
 .post_body {

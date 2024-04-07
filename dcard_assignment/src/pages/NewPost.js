@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
-import './NewPost.css';
-import { useNavigate } from 'react-router-dom'; // 導入 useNavigate
+import '../components/NewPost.css';
+import { useNavigate } from 'react-router-dom';
 
 Modal.setAppElement(document.body);
 
@@ -18,7 +18,7 @@ const NewPost = ({ closeModal }) => {
     useEffect(() => {
         const fetchRepositories = async () => {
             try {
-                const accessToken = "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";
+                const accessToken = "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";
                 const response = await axios.get(`https://api.github.com/user/repos`, {
                     headers: {
                         Authorization: `token ${accessToken}`
@@ -53,11 +53,11 @@ const NewPost = ({ closeModal }) => {
                 return;
             }
 
-            const accessToken = "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"; // 这里需要使用有效的 GitHub 访问令牌
+            const accessToken = "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";
             const response = await axios.post('http://localhost:4000/createIssue', {
                 title,
                 body,
-                selectedRepoId: selectedRepo // 发送所选存储库的 ID 给服务器
+                selectedRepoId: selectedRepo
             }, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
@@ -66,8 +66,8 @@ const NewPost = ({ closeModal }) => {
 
             console.log('Issue created:', response.data);
 
-            closeModal(); // 关闭模态对话框
-            navigate('/'); // 導航到根目錄
+            closeModal();
+            navigate('/');
 
         } catch (error) {
             console.error('Error adding new post:', error);
@@ -88,7 +88,7 @@ const NewPost = ({ closeModal }) => {
                         <select value={selectedRepo} onChange={(e) => setSelectedRepo(e.target.value)}>
                             <option value="">Select Repository</option>
                             {repositories.map(repo => (
-                                <option key={repo.id} value={repo.id}>{repo.full_name}</option> // 存储库的 value 设置为其 ID
+                                <option key={repo.id} value={repo.id}>{repo.full_name}</option>
                             ))}
                         </select>
                     </div>

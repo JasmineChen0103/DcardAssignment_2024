@@ -1,26 +1,29 @@
+/* PostList.css */
+
 .new-post-button {
     color: aliceblue;
     padding: 10px 20px;
-    /* 设置按钮内边距 */
     font-size: 20px;
-    /* 设置字体大小 */
     background-color: #006AA6;
-    /* 设置背景颜色 */
     border: none;
-    /* 移除边框 */
     border-radius: 5px;
-    /* 设置圆角 */
     margin-bottom: 20px;
-    /* 设置距离下面的 issue 的距离 */
     cursor: pointer;
-    /* 设置光标为指针 */
 }
 
 .issue_body {
-    height: 200px;
-    overflow-y: auto;
+    height: 18px;
+    overflow: hidden;
     border-radius: 0 0 8px 8px;
     padding: 10px;
+    white-space: nowrap;
+}
+
+.issue_body div {
+    display: inline-block;
+    max-width: calc(100% - 20px);
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .issue_title {

@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { parse } from 'marked';
-import './Post.css';
+import '../components/Post.css';
 import { useNavigate } from 'react-router-dom';
-import Modal from 'react-modal'; // 导入 Modal 组件
+import Modal from 'react-modal';
 import EditPost from './EditPost';
 
 
@@ -24,29 +24,29 @@ const Post = ({ userType }) => {
         if (location.state && location.state.issue) {
             const issue = location.state.issue;
 
-            // 提取 issue 对象中的属性和值
+            // 提取 issue 屬性的值
             const { title, body, html_url, user } = issue;
 
-            // 现在你可以在组件中使用这些数据了
             console.log("Issue Title: " + title);
             console.log("Issue Body: " + body);
             console.log("Issue URL: " + html_url);
-            var splitString = html_url.split("/"); // 将字符串根据 "/" 进行分割
-            setRepo(splitString[4]); // 设置 repo 变量的值
-            var repo = splitString[4]; // 获取分割后的第五个部分，即项目名称部分
+            //拿是哪個repository
+            var splitString = html_url.split("/");
+            setRepo(splitString[4]);
+            var repo = splitString[4];
             console.log(repo);
             console.log("Issue Author: " + user.login);
 
 
             console.log(userType);
 
-            setPost(issue); // 设置帖子数据
+            setPost(issue);
 
 
-            // 获取帖子的评论
+            // 抓評論
             const fetchComments = async () => {
                 try {
-                    // 提取仓库名称
+                    // 先抓repository名稱
                     const repositoryFullName = issue.repository_url.split('/').slice(-2).join('/');
                     const response = await axios.get(`https://api.github.com/repos/${repositoryFullName}/issues/${issue.number}/comments`);
                     setComments(response.data);
@@ -64,13 +64,13 @@ const Post = ({ userType }) => {
     const navigate = useNavigate();
 
     const handleDelete = async () => {
-        const accessToken = "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";
+        const accessToken = "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";
         const { number } = post;
-        const repoName = post.html_url.split("/")[4]; // 提取存儲庫名稱
+        const repoName = post.html_url.split("/")[4]; // 抓repository名稱
         try {
-            // 發送 PATCH 請求以關閉問題
+            // 發送 PATCH 請求 close issue
             await axios.patch(`https://api.github.com/repos/DannierForDcard/${repoName}/issues/${number}`, {
-                state: "closed" // 設置狀態為 "closed"
+                state: "closed"
             }, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
@@ -78,22 +78,20 @@ const Post = ({ userType }) => {
             });
             console.log('Closed issue:', { repo: repoName, number });
 
-            // 在成功關閉問題後，導航到根路徑
-            navigate('/'); // 導航到根路徑
+            navigate('/');
 
         } catch (error) {
             console.error('Error closing issue:', error);
         }
     };
 
-    // 打开编辑模态框
     const openEditModal = () => {
         setEditModalIsOpen(true);
     };
 
-
+    // 如果還在載顯示下載中
     if (loading) {
-        return <p>Loading post...</p>; // 如果还在加载，显示加载中
+        return <p>Loading post...</p>;
     }
 
     const renderMarkdown = (content) => {
@@ -120,7 +118,8 @@ const Post = ({ userType }) => {
                     <div key={comment.id} dangerouslySetInnerHTML={renderMarkdown(comment.body)} />
                 ))}
             </div>
-            {/* 编辑模态框开始 */}
+
+            {/* 編輯模式 */}
             <Modal
                 isOpen={editModalIsOpen}
                 onRequestClose={() => setEditModalIsOpen(false)}
@@ -128,7 +127,7 @@ const Post = ({ userType }) => {
             >
                 <EditPost post={post} closeModal={() => setEditModalIsOpen(false)} />
             </Modal>
-            {/* 编辑模态框结束 */}
+
         </div>
     );
 };

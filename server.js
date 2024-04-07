@@ -16,8 +16,6 @@ var app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-
-// Middleware
 app.use(express.json());
 
 // GitHub API endpoint
@@ -106,22 +104,6 @@ app.patch('/updateIssue/:issueNumber', async function (req, res) {
     }
 });
 
-// Route to delete a GitHub issue
-app.delete('/deleteIssue/DannierForDcard/:repo/:issueNumber', async function (req, res) {
-    const { repo, issueNumber } = req.params;
-    const accessToken = req.headers.authorization.replace('Bearer ', '');
-    const url = `${GITHUB_API_URL}/repos/DannierForDcard/${repo}/issues/${issueNumber}`;
-    try {
-        await axios.delete(url, {
-            headers: {
-                Authorization: `token ${accessToken}`
-            }
-        });
-        res.sendStatus(204);
-    } catch (error) {
-        res.status(error.response.status).json({ error: error.response.data });
-    }
-});
 
 // Start the server
 app.listen(4000, function () {
