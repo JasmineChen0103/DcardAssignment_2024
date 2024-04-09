@@ -10,13 +10,13 @@
 1. 克隆此存儲庫到本地機器：
 
     ```
-    git clone https://github.com/your_username/project_name.git
+    git clone https://github.com/JasmineChen0103/DcardAssignment_2024.git
     ```
 
 2. 進入專案目錄：
 
     ```
-    cd project_name
+    cd DcardAssignment_2024
     ```
 
 3. 安裝相關依賴：
@@ -30,6 +30,7 @@
     ```
     npm start
     ```
+    
 
 # 作業架構設計
 
