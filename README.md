@@ -13,24 +13,42 @@
     git clone https://github.com/JasmineChen0103/DcardAssignment_2024.git
     ```
 
-2. 進入專案目錄：
+2. 進入主要專案目錄：
 
     ```
     cd DcardAssignment_2024
     ```
 
-3. 安裝相關依賴：
+3. 在主要專案目錄中安裝相關依賴：
 
     ```
     npm install
     ```
 
-4. 啟動專案：
+4. 在主要專案目錄中啟動專案：
 
     ```
     npm start
     ```
-    
+
+5. 現在，進入專案子目錄 `dcard_assignment`：
+
+    ```
+    cd dcard_assignment
+    ```
+
+6. 在專案子目錄中安裝相關依賴：
+
+    ```
+    npm install
+    ```
+
+7. 在專案子目錄中啟動專案：
+
+    ```
+    npm start
+    ```
+
 
 # 作業架構設計
 
